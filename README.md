@@ -19,20 +19,6 @@
     <li>Documentation included</li>
 </ul>
 
-<h2 id="item-description__changelog">Changelog</h2>
-<strong>(8/May/2017)</strong>
-<ul>
-<li>Add some new callback functions</li>
-<li>Responsive update on filepicker</li>
-</ul>
-
-	<p><strong>(1/May/2017)</strong>
-</p><ul>
-<li>Fix issue when integrating with sweet alert plugin, which is the sweet alert dialog not showing when the filepicker is active</li>
-<li>Responsive update on filepicker</li>
-</ul>
-
-
 <h2 id="item-description__credit">Credit</h2>
 <ul>
 <li><a href="https://almsaeedstudio.com/" rel="nofollow">Admin LTE</a></li>
