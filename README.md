@@ -2,7 +2,7 @@
 <p>Looking for uploader plugin for your project?</p>
 
 
-	<p>Exort uploader can be a good choice, this plugin allows you to easily handle upload files or select existing files on your server into your project. The uploader comes with simple filepicker for select the existing files or upload a new files, this plugin also have a built in file size, file type and file limit validation. It does&#8217;t take too long to be able to use this plugin. Just include the plugin files, JavaScript and CSS files and turn it on.</p>
+<p>Exort uploader can be a good choice, this plugin allows you to easily handle upload files or select existing files on your server into your project. The uploader comes with simple filepicker for select the existing files or upload a new files, this plugin also have a built in file size, file type and file limit validation. It does&#8217;t take too long to be able to use this plugin. Just include the plugin files, JavaScript and CSS files and turn it on.</p>
 
 
 <h2 id="item-description__features">Features</h2>
