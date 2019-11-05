@@ -1,0 +1,244 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<title>Exort Uploader Documentation</title>
+		<link href="assets/css/bootstrap.min.css" rel="stylesheet">
+		<link href="assets/css/prism.css" rel="stylesheet">
+		<link href="assets/css/style.css" rel="stylesheet">
+		<script src="assets/js/jquery-2.1.1.min.js"></script>
+		<script src="assets/js/bootstrap.min.js"></script>
+		<script src="assets/js/prism.js"></script>
+		<script type="text/javascript">
+			$(document).ready(function() {
+				$(window).scroll(function() {
+					if ($(window).scrollTop() > 0) {
+						$(".move-top").show();
+					} else {
+						$(".move-top").hide();
+					}
+				});
+
+				$('.move-top').click(function() {
+					movePage('.top');
+				});
+
+				$('.sidebar').find('li').each(function() {
+					$(this).on('click', function() {
+						$('.sidebar').find('li').removeClass('active');
+						$(this).addClass('active')
+						var target = $(this).data("link");
+						movePage('#' + target);
+					});
+				});
+
+				function movePage(targetElement) {
+					$('html, body').animate({ 
+						scrollTop: $(targetElement).offset().top
+					}, 700);
+				}
+			});
+		</script>
+	</head>
+	<body>
+		<div class="col-md-3 sidebar">
+			<p class="logo">Exort Uploader</p>
+			<p class="subtitle">File Picker and Uploader Plugin</p>
+			<ul>
+				<li data-link="overview" class="active"><a href="javascript:;">Overview</a></li>
+				<li data-link="including-required-files"><a href="javascript:;">Including Required Files</a></li>
+				<li data-link="basic-uploader"><a href="javascript:;">Basic Uploader</a></a></li>
+				<li data-link="file-picker"><a href="javascript:;">File Picker</a></a></li>
+				<li data-link="file-validation"><a href="javascript:;">File Validation</a></a></li>
+				<li data-link="file-picker-data"><a href="javascript:;">File Picker Data</a></a></li>
+				<li data-link="set-saved-files"><a href="javascript:;">Set Saved Files</a></a></li>
+				<li data-link="callback-functions"><a href="javascript:;">Callback Functions</a></a></li>
+			</ul>
+		</div>
+		<div class="col-md-12 top">
+			<div class="row">
+				<div class="col-md-3"></div>
+				<div class="col-md-9 content">
+<!-- ================================================================================================= -->
+					<h4 id="overview">Overview</h4>
+					<p>Exort uploader is a jQuery plugin that will make it easier for you to handle uploading files or selecting files that have been uploaded. You can delete files from the file list or add new files. In addition you can also set the order of the file before the save.
+           			In many cases we require validation when uploading files, we have provided this feature, we can restrict file types based on mime type, limit file size, or limit the number of files.
+					<!-- ================================================================================================= -->
+					<h4 id="including-required-files">Including Required Files</h4>
+					<p>This section will help you to include required files for the plugin.</p>
+					<p class="title">1. Include jQuery</p>
+					<p>Exort Uploader is need jQuery to run, download and include jQuery.</p>
+<pre>
+	<code class="language-html">
+	&lt;script src="jquery.min.js"&gt;&lt;/script&gt;
+	</code>
+</pre>
+					<p class="title">2. Include Uploader Plugin</p>
+					<p>Then call the Uploader plugin, we have provide them on the bundle file, make sure to call jQuery first before this.</p>
+<pre>
+	<code class="language-html">
+	&lt;script src="exort.min.js"&gt;&lt;/script&gt;
+	</code>
+</pre>
+					<p class="title">3. Include Uploader CSS file</p>
+					<p>Include the CSS file too.</p>
+<pre>
+	<code class="language-html">
+	&lt;link rel="stylesheet" href="exort.min.css"&gt;
+	</code>
+</pre>
+<!-- ================================================================================================= -->
+<!-- ================================================================================================= -->
+					<h4 id="basic-uploader">Basic Uploader</h4>
+					<p>To use the uploader we need an element to trigger the uploader. Elements can be buttons, links, or others.</p>
+<pre>
+	<code class="language-javascript">
+	&lt;button class="uploader"&gt;Upload File&lt;/button&gt;
+	</code>
+</pre>
+					<p>Here is a example code to call the Uploader Plugin. Adjust the selector and option.</p>
+<pre>
+	<code class="language-javascript">
+	$(document).ready(function() {
+		var uploader = $('.uploader').uploader({
+			upload_url: 'upload.php', // Upload script on serverside
+			input_name: 'file', // Input text name to save file list
+			auto_upload: false // This option allow us to set whether the file will be uploaded directly or uploaded when certain events
+		})
+	})
+	</code>
+</pre>
+					<p>After the plugin runs, the uploader will automatically create an input text to save the uploaded file names. We can use this text input to store file names on the server. If we set "auto_upload" to false we can use "upload" method to start ajax upload manually, consider the following example.</p>
+<pre>
+	<code class="language-javascript">
+	$(document).ready(function() {
+		var uploader = $('.uploader').uploader({
+			upload_url: 'upload.php', // Upload script on serverside
+			input_name: 'file', // Input text name to save file list
+			auto_upload: false // This option allow us to set whether the file will be uploaded directly or uploaded when certain events
+		})
+
+		$('.save').on('click', function() {
+			uploader.upload(function() {
+				alert("Upload success...")
+			})
+		})
+})
+	</code>
+</pre>
+<!-- ================================================================================================= -->
+<!-- ================================================================================================= -->
+					<h4 id="file-picker">File Picker</h4>
+					<p>To use the filepicker we only need to modify the script above by adding the parameter "file_picker_url" as in the following example.</p>
+<pre>
+	<code class="language-javascript">
+	$(document).ready(function() {
+		var uploader = $('.uploader').uploader({
+			upload_url: 'upload.php', // Upload script on serverside
+			file_picker_url: 'files.php', // Script that return the list of files on the server
+			input_name: 'file' // Input text name to save file list
+		})
+	})
+	</code>
+</pre>
+					<p>A description of the serverside section will be discussed in the next section.</p>
+<!-- ================================================================================================= -->
+<!-- ================================================================================================= -->
+					<h4 id="file-validation">File Validation</h4>
+					<p>Exort uploader has three kinds of validation that is based on file size, file type, and number of files. For validation based on certain file type we can see from list mime type on following link : <a href="https://svn.apache.org/repos/asf/httpd/httpd/trunk/docs/conf/mime.types">https://svn.apache.org/repos/asf/httpd/httpd/trunk/docs/conf/mime.types</a></p>
+					<p>Here is an example of how to use validation on the uploader.</p>
+<pre>
+	<code class="language-javascript">
+	$(document).ready(function() {
+		var uploader = $('.uploader').uploader({
+			upload_url: 'upload.php', // Upload script on serverside
+			file_picker_url: 'files.php', // Script that return the list of files on the server
+			input_name: 'file' // Input text name to save file list
+			maximum_total_files: 4, // Set the maximum number of files
+			maximum_file_size: 50009000, // Set the maximum file size of every file uploaded
+			file_types_allowed: ['image/jpeg', 'image/png', 'image/vnd.adobe.photoshop'] // Set the allowed file type by mime type
+			on_error: function(err) {
+				console.log(err) // Callback function that return error messages when validation failed
+			}
+		})
+	})
+	</code>
+</pre>
+<!-- ================================================================================================= -->
+<!-- ================================================================================================= -->
+					<h4 id="file-picker-data">File Picker Data</h4>
+					<p>The file picker requires a script on the server to read the file on the server. Data displayed in pagination every 21 files. Data is returned from the server in JSON format, the data format used as follows.</p>
+<pre>
+	<code class="language-javascript">
+	{
+		"files": [
+			{
+				"file_name": "wave-2211925_640.jpg",
+				"file_size": 140896,
+				"file_type": "image/jpeg",
+				"file_thumbnail": "http://localhost/uploader/uploads/wave-2211925_640.jpg"
+			},
+			{
+				"file_name": "sunset-2180346_640.jpg",
+				"file_size": 19718,
+				"file_type": "image/jpeg",
+				"file_thumbnail": "http://localhost/uploader/uploads/sunset-2180346_640.jpg"
+			}
+		],
+		"total": 2
+	}
+	</code>
+</pre>
+<!-- ================================================================================================= -->
+<!-- ================================================================================================= -->
+					<h4 id="set-saved-files">Set Saved Files</h4>
+					<p>To display the list of files that have been stored on the server we can use the "set_files" method, the required parameters are the list of files stored on the server in the JSON format. You can see the following example.</p>
+<pre>
+	<code class="language-javascript">
+	var uploader = $('.uploader').uploader({
+		upload_url: 'upload.php',
+		file_picker_url: 'files.php',
+		input_name: 'file',
+		auto_upload: false,
+		maximum_total_files: 4,
+		maximum_file_size: 50009000,
+		file_types_allowed: ['image/jpeg', 'image/png', 'image/vnd.adobe.photoshop'],
+		on_error: function(err) {
+			console.log(err)
+		}
+	})
+
+	uploader.set_files('[{"file_name":"thumbnail.jpg","file_size":25774,"file_type":"image/jpeg","file_thumbnail":"http://localhost/uploader/uploads/thumbnail.jpg"},{"file_name":"IMG_5593.JPG","file_size":674625,"file_type":"image/jpeg","file_thumbnail":"http://localhost/uploader/uploads/IMG_5593.JPG"},{"file_name":"IMG_5591.JPG","file_size":748340,"file_type":"image/jpeg","file_thumbnail":"http://localhost/uploader/uploads/IMG_5591.JPG"}]')
+	</code>
+</pre>
+<!-- ================================================================================================= -->
+<!-- ================================================================================================= -->
+					<h4 id="callback-functions">Callback Functions</h4>
+					<p>This is a list of callback functions that we can use on spesific events when using uploader.</p>
+					<table class="table table-striped m-b-none">
+						<thead>
+							<tr>
+								<th>Method</th>
+								<th>Description</th>
+							</tr>
+						</thead>
+						<tbody>
+							<tr>                    
+								<td class="col-md-2">on_before_upload()</td>
+								<td class="col-md-8">This function will be called before the file will be uploaded</td>
+							</tr>
+							<tr>                    
+								<td class="col-md-2">on_success_upload()</td>
+								<td class="col-md-8">This function will be called after the file was uploaded</td>
+							</tr>
+							<tr>                    
+								<td class="col-md-2">on_error(err)</td>
+								<td class="col-md-8">This function will be called when there is an error while uploading the file</td>
+							</tr>
+						</tbody>
+					</table>
+<!-- ================================================================================================= -->
+				</div>
+			</div>
+		</div>
+	</body>
+</html>
